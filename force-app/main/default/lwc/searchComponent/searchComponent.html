@@ -1,17 +1,35 @@
 <template>
-    <lightning-input
-      type="search"
-      label="Search"
-      placeholder="Enter search term"
-      onkeypress={handleSearchKeyPress}
-    ></lightning-input>
-  
-    <template if:true={hasResults}>
-      <lightning-datatable
+  <lightning-card  title="Global Search">
+    <div class="slds-p-horizontal_small">
+      <lightning-input
+        type="search"
+        label="Search"
+        placeholder="Enter search term"
+        onkeypress={handleSearchKeyPress}
+      ></lightning-input>
+    </div>
+    
+      <template if:true={hasResults}>
+          <lightning-tabset>
+            <!-- Iterate over searchResults and create a tab for each object -->
+            <template for:each={resultWrapperList} for:item="result">
+              <lightning-tab label={result.objectName} key={result.objectName}>
+                <!-- Display a datatable for the records in this object -->
+                <lightning-datatable data={result.records} columns={result.fields} key-field="id"></lightning-datatable>
+              </lightning-tab>
+            </template>
+          </lightning-tabset>
+      </template> 
+    </lightning-card>
+</template>
+
+<!-- <lightning-datatable
         data={searchResults}
         columns={columns}
         key-field="id"
-      ></lightning-datatable>
-    </template>
-  </template>
+      ></lightning-datatable> -->
+      
+  
+
+  
   

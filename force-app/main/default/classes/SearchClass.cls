@@ -122,8 +122,11 @@ public class SearchClass {
     }
 
     public class SearchResultWrapper {
+        @AuraEnabled
         public List<SObject> records {get; set;}
+        @AuraEnabled
         public String objectName {get; set;}
+        @AuraEnabled
         public List<String> fields {get; set;}
 
         public SearchResultWrapper() {

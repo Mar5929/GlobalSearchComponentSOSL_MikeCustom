@@ -5,6 +5,7 @@ export default class SearchComponent extends LightningElement {
   @track searchTerm;
   @track searchResults = [];
   @track hasResults = false;
+  @track resultWrapperList;
 
 
   columns = [
@@ -29,12 +30,13 @@ export default class SearchComponent extends LightningElement {
       search({
         searchTerm: this.searchTerm,
         objectApiNames: ['Account', 'Opportunity'],
-        searchFields: ['Name', 'Tax_Id__c'],
-        // Limit the number of search results to 50
-        limit: 50
+        searchFields: ['Name', 'Tax_Id__c']
       })
         .then(results => {
           this.searchResults = results;
+          console.log('searchResults = ' + JSON.stringify(this.searchResults));
+          this.resultWrapperList = results;
+          console.log('resultWrapperList = ' + JSON.stringify(this.resultWrapperList));
           this.hasResults = this.searchResults.length >= 1;
         })
         .catch(error => {
