@@ -106,10 +106,25 @@ public class SearchClass {
 
             }
         }
-
+        
         for (SearchResultWrapper wrapperRec : resultWrapperList) {
             if (mapObjFields.containsKey(wrapperRec.objectName)) {
-                wrapperRec.fields = mapObjFields.get(wrapperRec.objectName);
+                List<FieldsWrapper> listfieldsWrapperInstance = new List<FieldsWrapper>();
+                
+                //loop through fields to build out FieldsWrapper instance and add to wrapperRec when complete
+                for (String strField : mapObjFields.get(wrapperRec.objectName)) {
+                    FieldsWrapper fieldsWrapperInstance = new FieldsWrapper();
+                    // Get the field from the SObject
+                    SObjectField field = Schema.getGlobalDescribe().get(wrapperRec.objectName).getDescribe().fields.getMap().get(strField);
+                    // Set the label, field name, and type of the FieldsWrapper instance
+                    fieldsWrapperInstance.label = String.valueOf(field.getDescribe().getLabel());
+                    fieldsWrapperInstance.fieldName = String.valueOf(field.getDescribe().getName());
+
+                    System.debug(fieldsWrapperInstance);
+                    listfieldsWrapperInstance.add(fieldsWrapperInstance);
+                }
+                System.debug(listfieldsWrapperInstance);
+                wrapperRec.fields = listfieldsWrapperInstance;
             }
         }
         
@@ -127,19 +142,41 @@ public class SearchClass {
         return fieldMap.containsKey(fieldApiName);
     }
 
+
     public class SearchResultWrapper {
         @AuraEnabled
         public List<SObject> records {get; set;}
         @AuraEnabled
         public String objectName {get; set;}
         @AuraEnabled
-        public List<String> fields {get; set;}
+        public List<FieldsWrapper> fields {get; set;} // instance of FieldsWrapper class
 
         public SearchResultWrapper() {
             //List<SObject> records, String objectName, List<String> fields
             this.records = records;
             this.objectName = objectName;
             this.fields = fields;
+        }
+    }
+
+
+    public class FieldsWrapper {
+        /*
+        Output will look something like:
+        {
+        label: 'Name',
+        fieldName: 'Name',
+        }
+        */
+        @AuraEnabled
+        public String label {get; set;}
+        @AuraEnabled
+        public String fieldName {get; set;}
+
+        public FieldsWrapper() {
+            
+            this.label = label;
+            this.fieldName = fieldName;
         }
     }
 
