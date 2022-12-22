@@ -1,3 +1,8 @@
+/*
+*TODO - fix test class after refactored SearchClass with nested wrapper classes
+*/
+
+
 @isTest
 public class SearchClassTest {
 

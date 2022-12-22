@@ -1,8 +1,3 @@
-/*
-* TODO: NEED TO UPDATE THE SearchResultWrapper 'field' PROPERTY TO USE PROPER SYNTAX. SEE BELOW FOR REFERENCE:
-https://salesforce.stackexchange.com/questions/363195/lwc-data-table-returning-blank-rows
-*/
-
 
 /*
 This Apex class defines a searchRecords method that takes three arguments: searchTerm, objectApiNames, and searchFields. 
@@ -11,7 +6,7 @@ to include in the search results, respectively.
 
 The searchRecords method constructs a SOSL query using the FIND keyword and the RETURNING clause, 
 and it dynamically inserts the objectApiNames and searchFields values into the query. 
-The query is then executed using the Database.query method, and the search results are returned as a list of SObject records.
+The query is then executed using the search.query method, and the search results are returned as a list of wrapper objects
 */
 
 public class SearchClass {
