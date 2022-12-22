@@ -6,6 +6,7 @@ export default class SearchComponent extends LightningElement {
   @track searchResults = [];
   @track hasResults = false;
   @track resultWrapperList;
+  @track noResults = false;
 
 
   columns = [
@@ -38,6 +39,7 @@ export default class SearchComponent extends LightningElement {
           this.resultWrapperList = results;
           console.log('resultWrapperList = ' + JSON.stringify(this.resultWrapperList));
           this.hasResults = this.searchResults.length >= 1;
+          this.noResults = Object.keys(this.searchResults).length === 0;
         })
         .catch(error => {
           // Handle error

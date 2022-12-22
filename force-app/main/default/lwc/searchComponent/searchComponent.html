@@ -3,12 +3,13 @@
     <div class="slds-p-horizontal_small">
       <lightning-input
         type="search"
-        label="Search"
+        label="Enter a search term and press the Enter key to see results"
         placeholder="Enter search term"
         onkeypress={handleSearchKeyPress}
+        title="Press the Enter key to search"
       ></lightning-input>
     </div>
-    
+    <div class="slds-p-horizontal_small">
       <template if:true={hasResults}>
           <lightning-tabset>
             <!-- Iterate over searchResults and create a tab for each object -->
@@ -19,8 +20,14 @@
               </lightning-tab>
             </template>
           </lightning-tabset>
-      </template> 
-    </lightning-card>
+      </template>
+      <template if:true={noResults}>
+        <div class="slds-p-top_medium">
+          <p class="slds-text-color_error">Sorry, there are no results for that term</p>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
 </template>
       
   
