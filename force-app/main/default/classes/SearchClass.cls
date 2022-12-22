@@ -1,4 +1,10 @@
 /*
+* TODO: NEED TO UPDATE THE SearchResultWrapper 'field' PROPERTY TO USE PROPER SYNTAX. SEE BELOW FOR REFERENCE:
+https://salesforce.stackexchange.com/questions/363195/lwc-data-table-returning-blank-rows
+*/
+
+
+/*
 This Apex class defines a searchRecords method that takes three arguments: searchTerm, objectApiNames, and searchFields. 
 The objectApiNames and searchFields arguments are both lists of strings, and they represent the object types and fields 
 to include in the search results, respectively.
