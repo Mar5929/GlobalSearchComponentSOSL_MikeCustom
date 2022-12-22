@@ -32,18 +32,18 @@ public class SearchClassTest {
                 // Verify that the first result has the correct object name and fields
                 System.assertEquals('Account', result.objectName, 'Incorrect object name');
                 System.assertEquals(2, result.fields.size(), 'Incorrect number of fields');
-                System.assertEquals(true, result.fields.contains('Name'), 'Field list does not contain Name');
-                System.assertEquals(true, result.fields.contains('Website'), 'Field list does not contain Email');
-                System.assertEquals(false, result.fields.contains('StageName'), 'Field list does not contain Email');
-                System.assertEquals(false, result.fields.contains('Amount'), 'Field list does not contain Amount');
+                System.assertEquals(true, result.fields.contains('Name'), 'Something went wrong in determining if field is available on object');
+                System.assertEquals(true, result.fields.contains('Website'), 'Something went wrong in determining if field is available on object');
+                System.assertEquals(false, result.fields.contains('StageName'), 'Something went wrong in determining if field is available on object');
+                System.assertEquals(false, result.fields.contains('Amount'), 'Something went wrong in determining if field is available on object');
             } else {
                 //Verify that the second result has the correct object name and fields
                 System.assertEquals('Opportunity', result.objectName, 'Incorrect object name');
                 System.assertEquals(3, result.fields.size(), 'Incorrect number of fields');
-                System.assertEquals(true, result.fields.contains('Name'), 'Field list does not contain Name');
-                System.assertEquals(false, result.fields.contains('Website'), 'Field list does not contain Email');
-                System.assertEquals(true, result.fields.contains('StageName'), 'Field list does not contain Email');
-                System.assertEquals(true, result.fields.contains('Amount'), 'Field list does not contain Amount');
+                System.assertEquals(true, result.fields.contains('Name'), 'Something went wrong in determining if field is available on object');
+                System.assertEquals(false, result.fields.contains('Website'), 'Something went wrong in determining if field is available on object');
+                System.assertEquals(true, result.fields.contains('StageName'), 'Something went wrong in determining if field is available on object');
+                System.assertEquals(true, result.fields.contains('Amount'), 'Something went wrong in determining if field is available on object');
             }
         }
         
