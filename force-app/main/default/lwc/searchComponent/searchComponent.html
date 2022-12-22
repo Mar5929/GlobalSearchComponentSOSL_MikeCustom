@@ -1,0 +1,17 @@
+<template>
+    <lightning-input
+      type="search"
+      label="Search"
+      placeholder="Enter search term"
+      onkeypress={handleSearchKeyPress}
+    ></lightning-input>
+  
+    <template if:true={hasResults}>
+      <lightning-datatable
+        data={searchResults}
+        columns={columns}
+        key-field="id"
+      ></lightning-datatable>
+    </template>
+  </template>
+  
