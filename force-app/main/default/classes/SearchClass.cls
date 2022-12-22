@@ -15,6 +15,9 @@ public class SearchClass {
         String returningClauseString = '';
         searchTerm += '*';
 
+        /*
+        * TODO: check to see if the field in searchFields list is an available field on the object before building that portion of SOSL query
+        */
         //start building RETURNING clause in SOSL query. 
         //Result should look something like 'Account(Name), Opportunity(Name), Account(Email), Opportunity(Email)'
         for (String searchField : searchFields) {
