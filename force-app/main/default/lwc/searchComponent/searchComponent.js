@@ -1,6 +1,6 @@
 import { LightningElement, track } from 'lwc';
 import search from '@salesforce/apex/SearchClass.searchRecords';
-import { showToast } from 'lightning/uiToastApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class SearchComponent extends LightningElement {
   @track searchTerm;
@@ -32,13 +32,13 @@ export default class SearchComponent extends LightningElement {
           console.log('resultWrapperList = ' + JSON.stringify(this.resultWrapperList));
           this.hasResults = this.resultWrapperList.length >= 1;
           this.noResults = Object.keys(this.resultWrapperList).length === 0;
+          if (!this.noResults) {
+            this.showSuccessToast('Found Records');
+          }
+          
         })
         .catch(error => {
-          showToast({
-            title: 'Error',
-            message: 'Something went wrong while searching for fields',
-            variant: 'error'
-          });
+          this.showErrorToast('Something went wrong while searching for fields');
         });
     } else {
       this.hasResults = false;
@@ -49,4 +49,23 @@ export default class SearchComponent extends LightningElement {
     const recordId = event.currentTarget.dataset.recordId;
     // Do something with the selected record's ID, such as dispatch an event
   }
+
+  showErrorToast(errorMessage) {
+    const event = new ShowToastEvent({
+        title: 'Error',
+        message: errorMessage,
+        variant: 'error'
+    });
+    this.dispatchEvent(event);
+  }
+
+  showSuccessToast(successMessage) {
+    const event = new ShowToastEvent({
+        title: 'Success!',
+        message: successMessage,
+        variant: 'success'
+    });
+    this.dispatchEvent(event);
+  }
+
 }
