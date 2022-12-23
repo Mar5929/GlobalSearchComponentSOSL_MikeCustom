@@ -147,7 +147,6 @@ public class SearchClass {
         public List<FieldsWrapper> fields {get; set;} // instance of FieldsWrapper class
 
         public SearchResultWrapper() {
-            //List<SObject> records, String objectName, List<String> fields
             this.records = records;
             this.objectName = objectName;
             this.fields = fields;
