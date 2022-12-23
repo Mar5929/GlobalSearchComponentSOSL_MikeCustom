@@ -1,5 +1,6 @@
 import { LightningElement, track } from 'lwc';
 import search from '@salesforce/apex/SearchClass.searchRecords';
+import { showToast } from 'lightning/uiToastApi';
 
 export default class SearchComponent extends LightningElement {
   @track searchTerm;
@@ -33,7 +34,11 @@ export default class SearchComponent extends LightningElement {
           this.noResults = Object.keys(this.resultWrapperList).length === 0;
         })
         .catch(error => {
-          // Handle error
+          showToast({
+            title: 'Error',
+            message: 'Something went wrong while searching for fields',
+            variant: 'error'
+          });
         });
     } else {
       this.hasResults = false;
