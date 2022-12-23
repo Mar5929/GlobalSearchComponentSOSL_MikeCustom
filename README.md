@@ -1,5 +1,7 @@
 # Search Component
 
+A component written by Mike Rihm, 12/23/2022
+
 This is a Lightning Web Component (LWC) that allows users to search for records in Salesforce across multiple object types and fields. The search is performed using the [Salesforce Object Search Language (SOSL)](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl.htm).
 
 ## Features
