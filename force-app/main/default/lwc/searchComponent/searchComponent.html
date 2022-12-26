@@ -16,10 +16,14 @@
             <template for:each={resultWrapperList} for:item="result">
               <lightning-tab label={result.objectName} key={result.objectName}>
                 <!-- Display a datatable for the records in this object -->
-                <lightning-datatable data={result.records} columns={result.fields} key-field="id"></lightning-datatable>
+                <lightning-datatable data={result.records} columns={result.fields} key-field="id" onrowselection={handleRowSelection}></lightning-datatable>
               </lightning-tab>
             </template>
           </lightning-tabset>
+          <!-- Display the "show record info" button only if the selectedRecords array has at least one element -->
+          <template if:true={selectedRows.length}>
+            <button>Show Record Info</button>
+          </template>
       </template>
       <template if:true={noResults}>
         <div class="slds-p-top_medium">
@@ -29,8 +33,3 @@
     </div>
   </lightning-card>
 </template>
-      
-  
-
-  
-  

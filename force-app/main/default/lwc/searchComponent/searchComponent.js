@@ -7,6 +7,7 @@ export default class SearchComponent extends LightningElement {
   @track hasResults = false;
   @track resultWrapperList;
   @track noResults = false;
+  @track selectedRows = []; // new property to track the selected records
 
 
   handleSearchKeyPress(event) {
@@ -45,10 +46,28 @@ export default class SearchComponent extends LightningElement {
     }
   }
 
-  handleResultClick(event) {
-    const recordId = event.currentTarget.dataset.recordId;
-    // Do something with the selected record's ID, such as dispatch an event
+  handleRowSelection( event ) {
+
+    const selRows = event.detail.selectedRows;
+    console.log( 'Selected Rows are ' + JSON.stringify ( selRows ) );
+    if ( this.selectedRows.length < selRows.length ) {
+
+        console.log( 'Selected' );
+
+    } else {
+
+        console.log( 'Deselected' );
+        let deselectedRecs = this.selectedRows
+             .filter(x => !selRows.includes(x))
+             .concat(selRows.filter(x => !this.selectedRows.includes(x)));
+
+        console.log( 'Deselected Rows are ' + JSON.stringify( deselectedRecs ) );
+
+    }
+    this.selectedRows = selRows;
+
   }
+
 
   showErrorToast(errorMessage) {
     const event = new ShowToastEvent({
