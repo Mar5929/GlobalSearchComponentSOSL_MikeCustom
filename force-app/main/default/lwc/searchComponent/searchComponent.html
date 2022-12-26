@@ -22,7 +22,7 @@
           </lightning-tabset>
           <!-- Display the "show record info" button only if the selectedRecords array has at least one element -->
           <template if:true={selectedRows.length}>
-            <lightning-button variant="brand" label="Brand" title="Show Record Info">Show Record Info</lightning-button>
+            <lightning-button variant="brand" label="Brand" title="Show Record Info" onclick={showModal}>Show Record Info</lightning-button>
           </template>
       </template>
       <template if:true={noResults}>

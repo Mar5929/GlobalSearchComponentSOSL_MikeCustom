@@ -1,6 +1,7 @@
 import { LightningElement, track } from 'lwc';
 import search from '@salesforce/apex/SearchClass.searchRecords';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import Modal from "c/modalComponent";
 
 export default class SearchComponent extends LightningElement {
   @track searchTerm;
@@ -77,6 +78,19 @@ export default class SearchComponent extends LightningElement {
     }
     this.selectedRows = selRows;
 
+  }
+
+  /**
+   * Opens modal component from c/modalComponent
+   */
+  showModal() {
+    Modal.open({
+      // maps to developer-created `@api properties`
+      size: 'large',
+      modalHeader: 'Heading',
+      modalBody: 'Body',
+      modalFooter: '',
+    })
   }
 
 
