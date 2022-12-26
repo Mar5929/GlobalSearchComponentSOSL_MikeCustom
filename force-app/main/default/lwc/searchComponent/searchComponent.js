@@ -87,6 +87,11 @@ export default class SearchComponent extends LightningElement {
     Modal.open({
       // maps to developer-created `@api properties`
       size: 'large',
+      records: this.selectedRows,
+      columns: [
+        {fieldName: 'Id', label:'Id'},
+        {fieldName: 'Name', label:'Name'}
+      ],
       modalHeader: 'Heading',
       modalBody: 'Body',
       modalFooter: '',

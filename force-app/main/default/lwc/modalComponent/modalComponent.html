@@ -4,7 +4,13 @@
 <template>
     <div class="slds-p-horizontal_small">
         <lightning-modal-header label={modalHeader}></lightning-modal-header>
-        <lightning-modal-body> {modalBody} </lightning-modal-body>
+        <lightning-modal-body> {modalBody} 
+            <template if:true={records.length}>
+                <div class="slds-p-top_medium">
+                    <lightning-datatable data={records} columns={columns} key-field="id"></lightning-datatable>
+                </div>
+            </template>
+        </lightning-modal-body>
         <lightning-modal-footer>
             <template if:true={modalFooter.length}>
                 {modalFooter}

@@ -6,8 +6,9 @@ import { api } from 'lwc';
 import LightningModal from 'lightning/modal';
 
 export default class modalComponent extends LightningModal {
-  // Data is passed to apis via .open({ options: [] })
-  @api options = [];
+  // Data is passed to apis via .open({ records: [], modalHeader: '', modalBody: '', modalBody: '', })
+  @api records = [];
+  @api columns;
   @api modalHeader = '';
   @api modalBody = '';
   @api modalFooter = '';
