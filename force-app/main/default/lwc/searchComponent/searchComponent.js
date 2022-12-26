@@ -10,6 +10,10 @@ export default class SearchComponent extends LightningElement {
   @track selectedRows = []; // new property to track the selected records
 
 
+  /**
+   * Call the handleSearchChange function when the user presses the 'Enter' key in the search box
+   * @param {*} event 
+   */
   handleSearchKeyPress(event) {
     if (event.key === 'Enter') {
         // Get the input value from the event target
@@ -20,6 +24,13 @@ export default class SearchComponent extends LightningElement {
     }
   }
 
+  /**
+ * Performs a SOSL search and updates the search results.
+ *
+ * @param {string} search.searchTerm - The search term.
+ * @param {string[]} search.objectApiNames - The names of the objects to search.
+ * @param {string[]} search.searchFields - The fields to search.
+ */
   handleSearchChange() {
     // Perform SOSL search if the search term is not empty
     if (this.searchTerm) {
@@ -46,29 +57,33 @@ export default class SearchComponent extends LightningElement {
     }
   }
 
+  /**
+   * Handles the addition or removal of records (rows) to the array 'selectedRows'.
+   * This in turn hides or shows the lightning-button to show record information
+   * 
+   * @param {*} event 
+   */
   handleRowSelection( event ) {
-
     const selRows = event.detail.selectedRows;
-    console.log( 'Selected Rows are ' + JSON.stringify ( selRows ) );
+    //console.log( 'Selected Rows are ' + JSON.stringify ( selRows ) );
     if ( this.selectedRows.length < selRows.length ) {
-
-        console.log( 'Selected' );
-
+        //console.log( 'Selected' );
     } else {
-
-        console.log( 'Deselected' );
+        //console.log( 'Deselected' );
         let deselectedRecs = this.selectedRows
              .filter(x => !selRows.includes(x))
              .concat(selRows.filter(x => !this.selectedRows.includes(x)));
-
-        console.log( 'Deselected Rows are ' + JSON.stringify( deselectedRecs ) );
-
+        //console.log( 'Deselected Rows are ' + JSON.stringify( deselectedRecs ) );
     }
     this.selectedRows = selRows;
 
   }
 
 
+  /**
+   * Dispatch error variant toast
+   * @param {*} errorMessage 
+   */
   showErrorToast(errorMessage) {
     const event = new ShowToastEvent({
         title: 'Error',
@@ -78,6 +93,10 @@ export default class SearchComponent extends LightningElement {
     this.dispatchEvent(event);
   }
 
+  /**
+   * Dispatch success variant toast
+   * @param {*} successMessage 
+   */
   showSuccessToast(successMessage) {
     const event = new ShowToastEvent({
         title: 'Success!',
