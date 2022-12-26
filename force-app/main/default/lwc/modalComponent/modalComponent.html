@@ -4,18 +4,40 @@
 <template>
     <div class="slds-p-horizontal_small">
         <lightning-modal-header label={modalHeader}></lightning-modal-header>
+
         <lightning-modal-body> {modalBody} 
-            <template if:true={records.length}>
+            <template if:true={trackedFields.length}>
+                <lightning-dual-listbox name="Tracked Fields"
+                            label="Select Fields"
+                            source-label="Available"
+                            selected-label="Selected"
+                            field-level-help="Select Tracked fields"
+                            options={trackedFields}
+                            onchange={handleSelectedChange}>
+                </lightning-dual-listbox>
+                <div class="slds-p-around_medium">
+                    <lightning-button variant="brand" label="Show History for Selected Records" title="Show History for Selected Records" onclick={showModal}>Show History for Selected Records</lightning-button>
+                </div>
+            </template>
+            <template if:true={isSearching}>
                 <div class="slds-p-top_medium">
-                    <lightning-datatable data={records} columns={columns} key-field="id"></lightning-datatable>
+                    <!-- Add the lightning-spinner component -->
+                    <lightning-spinner size="medium" variant="brand" alternative-text="Searching..."></lightning-spinner>
+                </div>
+            </template>
+            <template if:true={showDatatable}>
+                <div class="slds-p-top_medium">
+                    <lightning-datatable data={records} columns={columnsForRecords} key-field="id"></lightning-datatable>
                 </div>
             </template>
         </lightning-modal-body>
+
         <lightning-modal-footer>
             <template if:true={modalFooter.length}>
                 {modalFooter}
             </template>
             <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
         </lightning-modal-footer>
+
     </div>
 </template>

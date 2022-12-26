@@ -1,5 +1,6 @@
 import { LightningElement, track, api } from 'lwc';
 import search from '@salesforce/apex/SearchClass.searchRecords';
+import getTrackedFields from '@salesforce/apex/getTrackedFields.findTrackedFields';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import Modal from "c/modalComponent";
 
@@ -9,6 +10,9 @@ export default class SearchComponent extends LightningElement {
 
   @track listObjectApiNames = []; //string from js-meta.xml file converted to array of strings
   @track listSearchFields = []; //string from js-meta.xml file converted to array of strings
+
+  @api trackedFieldsForObject; //stores the list of tracked fields for object from selectedRows
+  @api selectedRowIds = [];
 
   @track searchTerm;
   @track hasResults = false;
@@ -78,7 +82,7 @@ export default class SearchComponent extends LightningElement {
         })
         .catch(error => {
           this.isSearching = false;
-          this.showErrorToast('Something went wrong while searching for fields: ' + error.message);
+          this.showErrorToast('Something went wrong while searching for records: ' + error.message);
           console.log(error.message);
         });
     } else {
@@ -113,16 +117,33 @@ export default class SearchComponent extends LightningElement {
    * Opens modal component from c/modalComponent
    */
   showModal() {
+    //this.selectedRows is not an SObject but rather it is a custom-defined wrapper object. Therefore, we need to extract the record Id's and populate an ID array.
+    for (let i = 0; i < this.selectedRows.length; i++) {
+      this.selectedRowIds.push(this.selectedRows[i].Id);
+    }
+    console.log('selectedRowIds = ' + this.selectedRowIds);
+    getTrackedFields({
+      recordIdList: this.selectedRowIds
+    })
+      .then(results => {
+        this.trackedFieldsForObject = results;
+      })
+      .catch(error => {
+        this.showErrorToast('Something went wrong while searching for fields: ' + error.message);
+        console.log(error.message);
+      });
+
     Modal.open({
       // maps to developer-created `@api properties`
       size: 'large',
       records: this.selectedRows,
-      columns: [
+      columnsForRecords: [
         {fieldName: 'Id', label:'Id'},
         {fieldName: 'Name', label:'Name'}
       ],
-      modalHeader: 'Heading',
-      modalBody: 'Body',
+      trackedFields: this.trackedFieldsForObject,
+      modalHeader: 'Record Field History',
+      modalBody: 'Please select which fields you would like to see the history for your selected records.',
       modalFooter: '',
     })
   }
