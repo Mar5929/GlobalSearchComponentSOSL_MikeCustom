@@ -10,6 +10,12 @@
       ></lightning-input>
     </div>
     <div class="slds-p-horizontal_small">
+      <template if:true={isSearching}>
+        <div class="slds-p-top_medium">
+          <!-- Add the lightning-spinner component -->
+          <lightning-spinner size="medium" variant="brand" alternative-text="Searching..."></lightning-spinner>
+        </div>
+      </template>
       <template if:true={hasResults}>
           <lightning-tabset>
             <!-- Iterate over searchResults and create a tab for each object -->

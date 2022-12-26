@@ -1,15 +1,39 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 import search from '@salesforce/apex/SearchClass.searchRecords';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import Modal from "c/modalComponent";
 
 export default class SearchComponent extends LightningElement {
+  @api objectApiNames = ''; //passed from js-meta.xml file
+  @api searchFields = ''; //passed from js-meta.xml file
+
+  @track listObjectApiNames = []; //string from js-meta.xml file converted to array of strings
+  @track listSearchFields = []; //string from js-meta.xml file converted to array of strings
+
   @track searchTerm;
   @track hasResults = false;
   @track resultWrapperList;
   @track noResults = false;
-  @track selectedRows = []; // new property to track the selected records
+  @track selectedRows = [];
+  @track isSearching = false;
 
+  /**
+   * Converts user entered strings to arrays of strings
+   * Removes leading and trailing white space in the listObjectApiNames and listSearchFields arrays when the page loads.
+   */
+  connectedCallback() {
+    //Set myVariable when the page loads
+    this.listObjectApiNames = this.objectApiNames.split(",");
+    //remove white space in array of strings
+    for (let i = 0; i < this.listObjectApiNames.length; i++) {
+      this.listObjectApiNames[i] = this.listObjectApiNames[i].trim();
+    }
+    this.listSearchFields = this.searchFields.split(",");
+    //remove white space in array of strings
+    for (let i = 0; i < this.listSearchFields.length; i++) {
+      this.listSearchFields[i] = this.listSearchFields[i].trim();
+    }
+  }
 
   /**
    * Call the handleSearchChange function when the user presses the 'Enter' key in the search box
@@ -20,7 +44,7 @@ export default class SearchComponent extends LightningElement {
         // Get the input value from the event target
         this.searchTerm = event.target.value;
         console.log('searchTerm = ' + this.searchTerm);
-
+        this.isSearching = true;
         this.handleSearchChange();
     }
   }
@@ -35,26 +59,31 @@ export default class SearchComponent extends LightningElement {
   handleSearchChange() {
     // Perform SOSL search if the search term is not empty
     if (this.searchTerm) {
+
       search({
         searchTerm: this.searchTerm,
-        objectApiNames: ['Account', 'Opportunity'],
-        searchFields: ['Name', 'Tax_Id__c', 'Website', 'StageName']
+        objectApiNames: this.listObjectApiNames,
+        searchFields: this.listSearchFields
       })
         .then(results => {
           this.resultWrapperList = results;
           console.log('resultWrapperList = ' + JSON.stringify(this.resultWrapperList));
           this.hasResults = this.resultWrapperList.length >= 1;
           this.noResults = Object.keys(this.resultWrapperList).length === 0;
+          this.isSearching = false;
           if (!this.noResults) {
             this.showSuccessToast('Found Records');
           }
           
         })
         .catch(error => {
-          this.showErrorToast('Something went wrong while searching for fields');
+          this.isSearching = false;
+          this.showErrorToast('Something went wrong while searching for fields: ' + error.message);
+          console.log(error.message);
         });
     } else {
       this.hasResults = false;
+      this.isSearching = false;
     }
   }
 
