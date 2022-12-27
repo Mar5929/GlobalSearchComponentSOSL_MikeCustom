@@ -10,20 +10,45 @@
  //https://www.infallibletechie.com/2021/04/lightning-dual-listboxlightning-combo.html
 public class getTrackedFields {
 
+    public class trackedFieldWrapper {
+        @AuraEnabled
+        public String value {get; set;}
+        @AuraEnabled
+        public String label {get; set;}
+
+        public trackedFieldWrapper() {
+            
+            this.value = value;
+            this.label = label;
+        }
+
+
+    }
+
     @AuraEnabled
-    public static List<FieldDefinition> findTrackedFields(List<String> recordIdList) {
-        List<FieldDefinition> results = new List<FieldDefinition>();
+    public static List<trackedFieldWrapper> findTrackedFields(List<String> recordIdList) {
+        //instantiate list of wrapper objects
+        List<trackedFieldWrapper> wrapperResults = new List<trackedFieldWrapper>();
         
 
         if(!recordIdList.isEmpty()) {
             //get Object Api name
             String objName = Id.valueOf(recordIdList[0]).getSObjectType().getDescribe().getName();
             
-            String soqlQueryForFieldDefinition = 'SELECT DeveloperName,QualifiedApiName,EntityDefinition.QualifiedApiName,IsFieldHistoryTracked FROM FieldDefinition WHERE IsFieldHistoryTracked = true AND EntityDefinition.QualifiedApiName = :objName ORDER BY DeveloperName ASC';
+            String soqlQueryForFieldDefinition = 'SELECT Label, DeveloperName,QualifiedApiName,EntityDefinition.QualifiedApiName,IsFieldHistoryTracked FROM FieldDefinition WHERE IsFieldHistoryTracked = true AND EntityDefinition.QualifiedApiName = :objName ORDER BY DeveloperName ASC';
     
-            results = Database.query(soqlQueryForFieldDefinition);
+            List<FieldDefinition> listQueryRestulst = Database.query(soqlQueryForFieldDefinition);
+
+            if(!listQueryRestulst.isEmpty())
+            for(FieldDefinition trackedField : listQueryRestulst) {
+                trackedFieldWrapper wrapper = new trackedFieldWrapper();
+                wrapper.value = trackedField.QualifiedApiName;
+                wrapper.label = trackedField.Label;
+
+                wrapperResults.add(wrapper);
+            }
         }
 
-        return results;
+        return wrapperResults;
     }
 }

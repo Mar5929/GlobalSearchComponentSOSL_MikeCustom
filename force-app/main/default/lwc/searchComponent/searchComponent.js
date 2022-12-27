@@ -11,7 +11,7 @@ export default class SearchComponent extends LightningElement {
   @track listObjectApiNames = []; //string from js-meta.xml file converted to array of strings
   @track listSearchFields = []; //string from js-meta.xml file converted to array of strings
 
-  @api trackedFieldsForObject; //stores the list of tracked fields for object from selectedRows
+  @track trackedFieldsForObject; //stores the list of tracked fields for object from selectedRows
   @api selectedRowIds = [];
 
   @track searchTerm;
@@ -127,6 +127,7 @@ export default class SearchComponent extends LightningElement {
     })
       .then(results => {
         this.trackedFieldsForObject = results;
+        console.log('this.trackedFieldsForObject = ' + JSON.stringify(this.trackedFieldsForObject));
       })
       .catch(error => {
         this.showErrorToast('Something went wrong while searching for fields: ' + error.message);
@@ -141,11 +142,17 @@ export default class SearchComponent extends LightningElement {
         {fieldName: 'Id', label:'Id'},
         {fieldName: 'Name', label:'Name'}
       ],
-      trackedFields: this.trackedFieldsForObject,
       modalHeader: 'Record Field History',
       modalBody: 'Please select which fields you would like to see the history for your selected records.',
       modalFooter: '',
     })
+
+    const trackedFieldsEvent = new CustomEvent("trackedfields", {
+      detail: this.trackedFieldsForObject
+    });
+
+    // Dispatches the event.
+    this.dispatchEvent(trackedFieldsEvent);
   }
 
 

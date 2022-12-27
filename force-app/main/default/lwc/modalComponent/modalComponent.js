@@ -20,6 +20,14 @@ export default class modalComponent extends LightningModal {
 
   connectedCallback() {
     
+    this.template.addEventListener('trackedfields', evt => {
+      this.trackedFields = evt.detail.value;
+      console.log('this.trackedField = ' + JSON.stringify(this.trackedFields));
+    });
+  }
+
+  handleEvent( event ) {
+    this.trackedFields = event.detail.value;
   }
 
   handleSelectedChange(e) {
