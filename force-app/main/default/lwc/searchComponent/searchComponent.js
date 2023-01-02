@@ -1,3 +1,8 @@
+/**
+ * TODO: NEED TO FIX THE DATATABLE SO IT CAN RE-EVALUATE SELECTED ROWS AND ONLY RETURNS THE SELECTED ROWS FROM THE SOBJECT TAB THEY ARE ON
+ * RECORDS FROM 2 SOBJECT TABS SHOULD NEVER BE RETURNED
+ */
+
 import { LightningElement, track, api } from 'lwc';
 import search from '@salesforce/apex/SearchClass.searchRecords';
 import getTrackedFields from '@salesforce/apex/getTrackedFields.findTrackedFields';
@@ -113,6 +118,7 @@ export default class SearchComponent extends LightningElement {
         //console.log( 'Deselected Rows are ' + JSON.stringify( deselectedRecs ) );
     }
     this.selectedRows = selRows;
+    console.log("this.selectedRows = " + this.selectedRows);
 
   }
 
@@ -122,6 +128,7 @@ export default class SearchComponent extends LightningElement {
    */
   searchTrackedFields() {
     this.isSearching = true;
+    this.selectedRowIds = [];
     //this.selectedRows is not an SObject but rather it is a custom-defined wrapper object. Therefore, we need to extract the record Id's and populate an ID array.
     for (let i = 0; i < this.selectedRows.length; i++) {
       this.selectedRowIds.push(this.selectedRows[i].Id);

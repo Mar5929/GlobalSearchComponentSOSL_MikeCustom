@@ -5,8 +5,9 @@
     <div class="slds-p-horizontal_small">
         <lightning-modal-header label={modalHeaderLabel}></lightning-modal-header>
 
-        <lightning-modal-body> {modalBodyText} 
+        <lightning-modal-body>  
             <template if:true={trackedFields.length}>
+                {modalBodyText}
                 <lightning-dual-listbox name="Tracked Fields"
                             label="Select Fields"
                             source-label="Available"
@@ -15,8 +16,16 @@
                             options={trackedFields}
                             onchange={handleSelectedChange}>
                 </lightning-dual-listbox>
+                <!-- Display the "show record info" button only if the selectedRecords array has at least one element -->
+                <template if:true={selectedFields.length}>
+                    <div class="slds-p-top_medium">
+                        <lightning-button variant="brand" label="Show Record Info" title="Show Record Info" onclick={searchTrackedFields}>Show Record Info</lightning-button>
+                    </div>
+                </template>
+            </template>
+            <template if:false={trackedFields.length}>
                 <div class="slds-p-top_medium">
-                    <lightning-button variant="brand" label="Show History for Selected Records" title="Show History for Selected Records" onclick={showModal}>Show History for Selected Records</lightning-button>
+                    <p class="slds-text-color_error">Sorry, there are no tracked fields for the records you selected</p>
                 </div>
             </template>
             <template if:true={isSearching}>
