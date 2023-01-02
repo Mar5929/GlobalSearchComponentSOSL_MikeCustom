@@ -14,7 +14,7 @@
                 description="Specify which objects to search for search term in. Enter in format as shown: Account, Opportunity"
                 required="true" />
             <property name="searchFields" type="String"
-                default="Name, Tax_Id__c, Website, StageName, Subject, Status"
+                default="Name, Active__c, AnnualRevenue, Tax_Id__c, Website, StageName, Subject, Status"
                 description="Specify which fields to be returned as columns in datatable. Fields will automatically be added or removed as columns on datatable if they exist on object. Enter in format as shown: Name, Status"
                 required="true" />
         </targetConfig>

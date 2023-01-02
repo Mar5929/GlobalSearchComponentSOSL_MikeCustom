@@ -3,9 +3,9 @@
 -->
 <template>
     <div class="slds-p-horizontal_small">
-        <lightning-modal-header label={modalHeader}></lightning-modal-header>
+        <lightning-modal-header label={modalHeaderLabel}></lightning-modal-header>
 
-        <lightning-modal-body> {modalBody} 
+        <lightning-modal-body> {modalBodyText} 
             <template if:true={trackedFields.length}>
                 <lightning-dual-listbox name="Tracked Fields"
                             label="Select Fields"
@@ -15,7 +15,7 @@
                             options={trackedFields}
                             onchange={handleSelectedChange}>
                 </lightning-dual-listbox>
-                <div class="slds-p-around_medium">
+                <div class="slds-p-top_medium">
                     <lightning-button variant="brand" label="Show History for Selected Records" title="Show History for Selected Records" onclick={showModal}>Show History for Selected Records</lightning-button>
                 </div>
             </template>
@@ -33,8 +33,8 @@
         </lightning-modal-body>
 
         <lightning-modal-footer>
-            <template if:true={modalFooter.length}>
-                {modalFooter}
+            <template if:true={modalFooterText.length}>
+                {modalFooterText}
             </template>
             <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
         </lightning-modal-footer>

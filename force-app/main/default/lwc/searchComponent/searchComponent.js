@@ -5,18 +5,21 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import Modal from "c/modalComponent";
 
 export default class SearchComponent extends LightningElement {
+  //INPUT VARIABLES=================
   @api objectApiNames = ''; //passed from js-meta.xml file
   @api searchFields = ''; //passed from js-meta.xml file
 
   @track listObjectApiNames = []; //string from js-meta.xml file converted to array of strings
   @track listSearchFields = []; //string from js-meta.xml file converted to array of strings
 
-  @track trackedFieldsForObject; //stores the list of tracked fields for object from selectedRows
+  //OUTPUT VARIABLES=================
+  @track resultWrapperList;
   @api selectedRowIds = [];
+  @track trackedFieldsForObject; //stores the list of tracked fields for object from selectedRows
 
   @track searchTerm;
   @track hasResults = false;
-  @track resultWrapperList;
+  
   @track noResults = false;
   @track selectedRows = [];
   @track isSearching = false;
@@ -113,10 +116,12 @@ export default class SearchComponent extends LightningElement {
 
   }
 
+
   /**
-   * Opens modal component from c/modalComponent
+   * calls the getTrackedFields.findTrackedFields method and returns the tracked fields wrapper object
    */
-  showModal() {
+  searchTrackedFields() {
+    this.isSearching = true;
     //this.selectedRows is not an SObject but rather it is a custom-defined wrapper object. Therefore, we need to extract the record Id's and populate an ID array.
     for (let i = 0; i < this.selectedRows.length; i++) {
       this.selectedRowIds.push(this.selectedRows[i].Id);
@@ -127,34 +132,40 @@ export default class SearchComponent extends LightningElement {
     })
       .then(results => {
         this.trackedFieldsForObject = results;
-        console.log('this.trackedFieldsForObject = ' + JSON.stringify(this.trackedFieldsForObject));
+        console.log(' in searchComponent.searchTrackedFields() => this.trackedFieldsForObject = ' + JSON.stringify(this.trackedFieldsForObject));
+        this.isSearching = false;
+        this.showModal();
       })
       .catch(error => {
+        this.isSearching = false;
         this.showErrorToast('Something went wrong while searching for fields: ' + error.message);
         console.log(error.message);
       });
 
+    
+
+  }
+
+  /**
+   * Opens modal component from c/modalComponent
+   */
+  showModal() {
     Modal.open({
       // maps to developer-created `@api properties`
       size: 'large',
+      modalHeaderLabel: 'Record Field History',
+      modalBodyText: 'Please select which fields you would like to see the history for your selected records.',
+      modalFooterText: '',
       records: this.selectedRows,
+      trackedFields : this.trackedFieldsForObject,
       columnsForRecords: [
         {fieldName: 'Id', label:'Id'},
         {fieldName: 'Name', label:'Name'}
       ],
-      modalHeader: 'Record Field History',
-      modalBody: 'Please select which fields you would like to see the history for your selected records.',
-      modalFooter: '',
+      
     })
-
-    const trackedFieldsEvent = new CustomEvent("trackedfields", {
-      detail: this.trackedFieldsForObject
-    });
-
-    // Dispatches the event.
-    this.dispatchEvent(trackedFieldsEvent);
   }
-
+  
 
   /**
    * Dispatch error variant toast

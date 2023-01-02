@@ -7,44 +7,38 @@ import LightningModal from 'lightning/modal';
 
 export default class modalComponent extends LightningModal {
   // Data is passed to apis via .open({ records: [], modalHeader: '', modalBody: '', modalBody: '', })
-  @api records = [];
-  @api columnsForRecords;
-  @api trackedFields;
-  @api modalHeader = '';
-  @api modalBody = '';
-  @api modalFooter = '';
 
-  @track isSearching = false;
-  selectedFields = [];
-  showDatatable = false;
+  //INPUT VARIABLES=================
+  @api modalHeaderLabel = '';
+  @api modalBodyText = '';
+  @api modalFooterText = '';
+
+  @api trackedFields = []; //holds the resulting available tracked fields for the object. Displayed in multi-select combobox  
+  @api records = []; //holds the resulting records after trackedFields are selected
+  @api columnsForRecords; //columns for the resulting records after trackedFields are selected
+ 
+  @track isSearching = false; //controls the lightning-spinner component while searching
+  @track showDatatable = false; //controls the visibility of the resulting records after trackedFields are selected
+  
+
+  //OUTPUT VARIABLES=================
+  selectedFields = []; //holds the selected tracked fields from the combobox
 
   connectedCallback() {
-    
-    this.template.addEventListener('trackedfields', evt => {
-      this.trackedFields = evt.detail.value;
-      console.log('this.trackedField = ' + JSON.stringify(this.trackedFields));
-    });
+    console.log(' in modalComponent => this.trackedFieldsForObject = ' + JSON.stringify(this.trackedFields));
+    console.log(' in modalComponent => this.records = ' + JSON.stringify(this.records));
   }
 
-  handleEvent( event ) {
-    this.trackedFields = event.detail.value;
-  }
-
-  handleSelectedChange(e) {
-    this.selectedFields = e.detail.value;
+  
+  handleSelectedChange(event) {
+    this.selectedFields = event.detail.value;
+    console.log("in modalComponent.handleSelectedChange(). Selected Fields are => " + this.selectedFields);
   }
 
   getRecordHistory() {
     this.isSearching = true;
     this.showDatatable = true;
   }
-
-  /**
-   * Gets the selected fields to show field history for records selected
-   */
-  get selected() {
-    return this.selectedFields.length ? this.selectedFields : 'none';
-    }
 
 
   handleClose() {
